@@ -61,15 +61,18 @@ app.post('/vote', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error in vote process:', error.message);
-    
+    console.error('Error in vote process:', error);
+      
     // Handle different types of errors
     if (error.response) {
-      // External API error
+      // External API error - send the API error message
+      const apiError = error.response.data;
+      const errorMessage = apiError?.error || apiError?.message || 'Unknown API error';
+      
       res.status(error.response.status).json({
         success: false,
-        message: 'Error in vote process',
-        error: error.response.data,
+        message: errorMessage,
+        error: apiError,
         timestamp: new Date().toISOString()
       });
     } else if (error.request) {
