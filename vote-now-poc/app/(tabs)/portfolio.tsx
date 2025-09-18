@@ -383,7 +383,7 @@ export default function PortfolioScreen() {
                 {/* Vote Now Button with onPress */}
                 {holding.symbol === "TSLA" && (
                   <VoteNowButton
-                    URL={votingUrl ? votingUrl : ''}
+                    URL={votingUrl}
                     label="Vote Now"
                     buttonStyle={styles.voteNowButton}
                     textStyle={styles.voteNowButtonText}
@@ -391,12 +391,15 @@ export default function PortfolioScreen() {
                     isLoading={holding.symbol == "TSLA" ? isLoading : false}
                     onSuccess={() => {
                       setVotingUrl(''); // Clear URL after successful vote
+                      setIsLoading(false); // Reset loading state
                     }}
                     onBack={() => {
-                      setVotingUrl(''); 
+                      setVotingUrl(''); // Clear URL on back/close
+                      setIsLoading(false); // Reset loading state
                     }}
                     onError={(error) => {
                       console.log(error);
+                      setIsLoading(false); // Reset loading state on error
                     }}
                   />
                 )}
