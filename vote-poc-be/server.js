@@ -68,7 +68,7 @@ app.post('/vote', async (req, res) => {
       // External API error
       res.status(error.response.status).json({
         success: false,
-        message: 'External API error',
+        message: 'Error in vote process',
         error: error.response.data,
         timestamp: new Date().toISOString()
       });

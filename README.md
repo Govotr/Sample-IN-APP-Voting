@@ -74,6 +74,7 @@ Navigate to the mobile app directory:
 ```bash
 cd vote-now-poc
 npm install
+npm install ./govotr-vote-react-native-1.0.0.tgz --legacy-peer-deps
 ```
 
 Start the Expo development server:
@@ -83,6 +84,7 @@ npx expo start
 ```
 
 This will open the Expo development tools. You can then:
+
 - Press `a` to open on Android emulator
 - Press `i` to open on iOS simulator
 - Scan the QR code with Expo Go app on your physical device
@@ -108,10 +110,12 @@ The React Native application includes:
 ### Endpoints
 
 #### Health Check
+
 - **GET** `/health`
 - Returns server status and timestamp
 
 #### Vote Process
+
 - **POST** `/vote`
 - Initiates the voting process by:
   1. Getting OAuth token from external API
@@ -119,6 +123,7 @@ The React Native application includes:
   3. Returning the voting URL
 
 **Request Body:**
+
 ```json
 {
   // No specific body required
@@ -126,6 +131,7 @@ The React Native application includes:
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -137,14 +143,14 @@ The React Native application includes:
 
 ### Environment Variables
 
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `PORT` | Server port (default: 3001) | No |
-| `NODE_ENV` | Environment mode | No |
-| `OAUTH_API_URL` | OAuth token endpoint URL | Yes |
-| `CLIENT_ID` | OAuth client ID | Yes |
-| `CLIENT_SECRET` | OAuth client secret | Yes |
-| `DATA_ENDPOINT_URL` | Data sending endpoint URL | Yes |
+| Variable            | Description                 | Required |
+| ------------------- | --------------------------- | -------- |
+| `PORT`              | Server port (default: 3001) | No       |
+| `NODE_ENV`          | Environment mode            | No       |
+| `OAUTH_API_URL`     | OAuth token endpoint URL    | Yes      |
+| `CLIENT_ID`         | OAuth client ID             | Yes      |
+| `CLIENT_SECRET`     | OAuth client secret         | Yes      |
+| `DATA_ENDPOINT_URL` | Data sending endpoint URL   | Yes      |
 
 ## 🗳️ govotr SDK Integration
 
@@ -152,8 +158,8 @@ The project includes the govotr voting SDK for React Native integration.
 
 ### SDK Package
 
-- **Package**: `govotr-vote-sdk-1.0.0.tgz`
-- **Location**: `vote-now-poc/govotr-vote-sdk-1.0.0.tgz`
+- **Package**: `govotr-vote-react-native-1.0.0.tgz`
+- **Location**: `govotr-vote-react-native-1.0.0.tgz`
 - **Dependencies**: Already included in `package.json`
 
 ### SDK Usage
@@ -163,8 +169,7 @@ The SDK is configured in the mobile app's `package.json`:
 ```json
 {
   "dependencies": {
-    "@govotr/vote-sdk": "file:govotr-vote-sdk-1.0.0.tgz",
-    "rn-vote-sdk": "file:rn-vote-sdk-1.0.0.tgz"
+    "@govotr/vote-sdk": "file:govotr-vote-sdk-1.0.0.tgz"
   }
 }
 ```
@@ -179,26 +184,49 @@ The SDK is configured in the mobile app's `package.json`:
 ### Sample Implementation
 
 ```typescript
-import { GovotrSDK } from '@govotr/vote-sdk';
+import { VoteNowButton } from "@govotr/vote-react-native";
 
 // Initialize the SDK
-const sdk = new GovotrSDK({
-  apiKey: 'your-api-key',
-  environment: 'development' // or 'production'
-});
+const handleVoteClick = async () => {
+  setIsLoading(true);
 
-// Start voting process
-const startVoting = async () => {
   try {
-    const result = await sdk.startVote({
-      eventId: 'your-event-id',
-      userId: 'user-id'
+    const response = await fetch("BACKEND URL", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
-    console.log('Voting URL:', result.url);
+
+    const data = await response.json();
+
+    if (data.success && data.url) {
+      setVotingUrl(data.url);
+    }
   } catch (error) {
-    console.error('Voting error:', error);
+  } finally {
+    setIsLoading(false);
   }
 };
+
+// Start voting process
+<VoteNowButton
+  URL={votingUrl}
+  label="Vote Now"
+  buttonStyle={styles.voteNowButton}
+  textStyle={styles.voteNowButtonText}
+  onPress={handleVoteClick}
+  isLoading={false}
+  onSuccess={() => {
+    console.log("success");
+  }}
+  onBack={() => {
+    console.log("back");
+  }}
+  onError={(error) => {
+    console.log(error);
+  }}
+/>;
 ```
 
 ## 🔄 Development Workflow
@@ -274,16 +302,19 @@ This is a **sample implementation** designed to help clients understand how to i
 ### Common Issues
 
 **Backend won't start:**
+
 - Check if port 3001 is available
 - Verify all environment variables are set
 - Ensure all dependencies are installed
 
 **Mobile app won't load:**
+
 - Make sure Expo CLI is installed globally
 - Check if the development server is running
 - Verify device/emulator is connected
 
 **SDK integration issues:**
+
 - Ensure the SDK package is properly installed
 - Check SDK configuration parameters
 - Verify API endpoints are accessible

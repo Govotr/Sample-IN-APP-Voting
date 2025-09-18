@@ -2,7 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { VoteNowButton } from "@govotr/vote-sdk";
+import { VoteNowButton } from "@govotr/vote-react-native";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -23,7 +23,7 @@ export default function PortfolioScreen() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://172.23.0.91:3001/vote', {
+      const response = await fetch('http://172.23.0.237:3001/vote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,7 +40,6 @@ export default function PortfolioScreen() {
       }
     } catch (error) {
       console.error('Vote API error:', error);
-      Alert.alert('Error',`${error} http://172.23.0.91:3001/vote Failed to connect to voting service. Please try again.`);
     } finally {
       setIsLoading(false);
     }
@@ -328,7 +327,7 @@ export default function PortfolioScreen() {
         <View style={styles.section}>
           <ThemedText style={styles.sectionTitle}>Your Holdings</ThemedText>
           {mockHoldings.map((holding) => (
-            <View key={holding.id} style={styles.holdingItem}>
+            <View key={holding.id} style={styles.holdingItem} {...({} as any)}>
               <View style={styles.holdingHeader}>
                 <View style={styles.companyImageContainer}>
                   <Image
@@ -382,24 +381,25 @@ export default function PortfolioScreen() {
                   </ThemedText>
                 </View>
                 {/* Vote Now Button with onPress */}
-                <VoteNowButton
-                  URL={votingUrl}
-                  label="Vote Nossw"
-                  buttonStyle={styles.voteNowButton}
-                  textStyle={styles.voteNowButtonText}
-                  onPress={handleVoteClick}
-                  isLoading={holding.symbol == "TSLA" ? isLoading : false}
-                  onSuccess={() => {
-                    setVotingUrl(''); // Clear URL after successful vote
-                  }}
-                  onBack={() => {
-                    setVotingUrl(''); 
-                  }}
-                  onError={(error) => {
-                    console.log(error);
-                  }}
-                  isDisabled={holding.symbol !== "TSLA"}
-                />
+                {holding.symbol === "TSLA" && (
+                  <VoteNowButton
+                    URL={votingUrl ? votingUrl : ''}
+                    label="Vote Now"
+                    buttonStyle={styles.voteNowButton}
+                    textStyle={styles.voteNowButtonText}
+                    onPress={handleVoteClick}
+                    isLoading={holding.symbol == "TSLA" ? isLoading : false}
+                    onSuccess={() => {
+                      setVotingUrl(''); // Clear URL after successful vote
+                    }}
+                    onBack={() => {
+                      setVotingUrl(''); 
+                    }}
+                    onError={(error) => {
+                      console.log(error);
+                    }}
+                  />
+                )}
               </View>
             </View>
           ))}
