@@ -166,13 +166,6 @@ export default function PortfolioScreen() {
     },
     voteNowButton: {
       backgroundColor: "#5163FF",
-      borderRadius: 12,
-      alignItems: "center",
-    },
-    voteNowButtonText: {
-      color: "white",
-      fontSize: 18,
-      fontWeight: "bold",
     },
     voteNowSubtext: {
       color: "white",
@@ -386,7 +379,6 @@ export default function PortfolioScreen() {
                     URL={votingUrl}
                     label="Vote Now"
                     buttonStyle={styles.voteNowButton}
-                    textStyle={styles.voteNowButtonText}
                     onPress={handleVoteClick}
                     isLoading={holding.symbol == "TSLA" ? isLoading : false}
                     onSuccess={() => {
