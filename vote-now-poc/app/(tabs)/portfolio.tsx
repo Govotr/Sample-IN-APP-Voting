@@ -23,7 +23,7 @@ export default function PortfolioScreen() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://172.23.0.237:3001/vote', {
+      const response = await fetch('http://172.23.0.214:3001/vote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,12 @@ export default function PortfolioScreen() {
       marginTop: 4,
     },
     voteNowButton: {
-      backgroundColor: "#5163FF",
+      backgroundColor:'#5163FF',
+    },
+    voteNowButtonText: {
+      color: "white",
+      fontWeight:'700',
+      fontSize:15,
     },
     voteNowSubtext: {
       color: "white",
