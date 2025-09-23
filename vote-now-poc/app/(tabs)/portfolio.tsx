@@ -23,7 +23,7 @@ export default function PortfolioScreen() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://172.23.0.214:3001/vote', {
+      const response = await fetch('https://api-dev.govotr.com/api/v1/get-voting-url', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,9 +32,8 @@ export default function PortfolioScreen() {
       
       const data = await response.json();
       
-      if (data.success && data.url) {
-        setVotingUrl(data.url);
-        console.log('Vote URL received:', data.url);
+      if (data.status && data.data.url) {
+        setVotingUrl(data?.data?.url);
       } else {
         Alert.alert('Error', data.message || 'Failed to get voting URL');
       }
