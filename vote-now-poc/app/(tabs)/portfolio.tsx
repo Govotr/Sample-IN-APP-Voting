@@ -23,7 +23,7 @@ export default function PortfolioScreen() {
     setIsLoading(true);
     
     try {
-      const response = await fetch('https://api-dev.govotr.com/api/v1/get-voting-url', {
+      const response = await fetch('https://YOUR-BACKEND-URL/vote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
