@@ -77,6 +77,30 @@ npm install
 npm install ./govotr-vote-react-native-1.0.0.tgz --legacy-peer-deps
 ```
 
+#### 📱 Mobile App Backend URL Configuration
+
+**Important**: You need to configure your backend URL in the mobile app to connect to your backend server.
+
+**File Location**: `vote-now-poc/app/(tabs)/portfolio.tsx`
+
+**Line to Update**: Line 26
+
+Replace the placeholder URL:
+```typescript
+// Current (Line 26):
+const response = await fetch('https://YOUR-BACKEND-URL/vote', {
+
+// Update to your actual backend URL:
+const response = await fetch('http://localhost:3001/vote', {
+// OR for production:
+const response = await fetch('https://your-backend-domain.com/vote', {
+```
+
+**Additional Configuration**:
+- For local development: Use `http://localhost:3001/vote`
+- For production: Use your deployed backend URL
+- Ensure the URL matches your backend server's actual endpoint
+
 Start the Expo development server:
 
 ```bash
@@ -103,7 +127,20 @@ The React Native application includes:
 
 - **Login Screen** (`/login`): User authentication
 - **Dashboard** (`/(tabs)/dashboard`): Main portfolio view
-- **Portfolio** (`/(tabs)/portfolio`): Detailed portfolio management
+- **Portfolio** (`/(tabs)/portfolio`): Detailed portfolio management with voting integration
+
+### Portfolio Screen Features
+
+The Portfolio screen (`vote-now-poc/app/(tabs)/portfolio.tsx`) includes:
+
+- **Stock Holdings Display**: Shows mock portfolio data with company logos
+- **Voting Integration**: Integrates govotr SDK for voting functionality
+- **Backend API Call**: Makes POST request to backend `/vote` endpoint (Line 26)
+- **VoteNowButton Component**: Uses the govotr SDK button for voting UI
+- **Loading States**: Handles loading and error states during voting process
+- **Tesla Voting**: Currently configured to show voting option for Tesla (TSLA) holdings
+
+**Key Integration Point**: The `handleVoteClick` function (Lines 22-45) handles the API call to your backend server.
 
 ## 🔧 Backend API
 
@@ -281,12 +318,20 @@ This is a **sample implementation** designed to help clients understand how to i
 
 ### What Clients Need to Do
 
-1. **Configure Environment Variables**: Set up your actual API endpoints and credentials
-2. **Customize UI**: Adapt the mobile app UI to match your brand
-3. **Implement Authentication**: Add proper user authentication system
-4. **Add Business Logic**: Implement your specific voting logic
-5. **Deploy**: Deploy backend to your preferred hosting platform
-6. **Test**: Thoroughly test the integration with your systems
+1. **Configure Backend Server**: 
+   - Edit `vote-poc-be/server.js` to integrate with your APIs
+   - Update environment variables in `.env` file
+   - Modify OAuth and data endpoint configurations
+2. **Configure Mobile App Backend URL**:
+   - Update `vote-now-poc/app/(tabs)/portfolio.tsx` (Line 26)
+   - Replace `'https://YOUR-BACKEND-URL/vote'` with your actual backend URL
+   - Use `http://localhost:3001/vote` for local development
+   - Use your deployed backend URL for production
+3. **Customize UI**: Adapt the mobile app UI to match your brand
+4. **Implement Authentication**: Add proper user authentication system
+5. **Add Business Logic**: Implement your specific voting logic
+6. **Deploy**: Deploy backend to your preferred hosting platform
+7. **Test**: Thoroughly test the integration with your systems
 
 ### Security Considerations
 
